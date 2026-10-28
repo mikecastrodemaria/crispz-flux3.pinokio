@@ -37,8 +37,7 @@ module.exports = {
         },
         path: "app",
         message: [
-          "uv pip install -r requirements.txt",
-          "uv pip install -r requirements-extra.txt"
+          "uv pip install -r requirements.txt"
         ]
       }
     },
@@ -50,6 +49,24 @@ module.exports = {
         path: "app",
         message: [
           "uv pip install --no-deps pillow==13.0.0"
+        ]
+      }
+    },
+    // The extras (rembg for Remove BG, trustmark, c2pa, ultralytics) AFTER Pillow 13:
+    // every rembg since 2.0.75 requires pillow>=12.1 while gradio 5.50 requires
+    // pillow<12, so asking for both in one resolution fails (seen 2026-10-28). Installed
+    // here, rembg resolves against the Pillow 13 already in place.
+    {
+      method: "shell.run",
+      params: {
+        venv: "env",
+        env: {
+          PYTHONUTF8: "1",
+          PYTHONIOENCODING: "utf-8"
+        },
+        path: "app",
+        message: [
+          "uv pip install -r requirements-extra.txt"
         ]
       }
     },
